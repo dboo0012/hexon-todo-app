@@ -7,4 +7,9 @@ module.exports = defineConfig([
   {
     ignores: ["dist/*", ".expo/*"],
   },
+  {
+    // jest.mock factories must use require().
+    files: ["jest.setup.ts"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
 ]);
