@@ -38,7 +38,7 @@ JSONPlaceholder always returns `id: 201` for created todos, so new tasks get a l
 
 - [x] **T1 Scaffold** — `create-expo-app` (blank-typescript), ESLint/Prettier, jest-expo + @testing-library/react-native, `.gitignore`.
 - [x] **T2 API layer** — `fetchTodos`, `createTodo`, typed; unit tests with mocked `fetch` (ok, non-ok, network error).
-- [ ] **T3 useTodos hook** — load / retry / add (saving + error state, local id) / toggle / delete; tests.
+- [x] **T3 useTodos hook** — load / retry / add (saving + error state, local id) / toggle / delete; tests.
 - [ ] **T4 UI** — components + screen: FlatList, checkbox toggle, delete button, add form (trim validation, disabled while saving, inline error), loading / error+retry / empty states, KeyboardAvoidingView, safe area. Component tests.
 - [ ] **T5 AsyncStorage bonus** — hydrate from storage on launch (skip network if present), persist on change, "Reset from API" action; tests.
 - [ ] **T6 Verify** — `npx expo start --web` smoke test in a browser (+ typecheck, lint, tests green).
