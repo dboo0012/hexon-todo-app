@@ -86,15 +86,18 @@ describe("adding", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it.each(["", "   ", "\n\t"])("rejects a blank title %j without calling the API", async (title) => {
-    fetchTodos.mockResolvedValue(seed);
-    const { result } = await setup();
+  it.each(["", "   ", "\n\t"])(
+    "rejects a blank title %j without calling the API",
+    async (title) => {
+      fetchTodos.mockResolvedValue(seed);
+      const { result } = await setup();
 
-    await act(() => result.current.addTodo(title));
-    expect(createTodo).not.toHaveBeenCalled();
-    expect(result.current.addError).toBe("Enter a task title.");
-    expect(result.current.todos).toEqual(seed);
-  });
+      await act(() => result.current.addTodo(title));
+      expect(createTodo).not.toHaveBeenCalled();
+      expect(result.current.addError).toBe("Enter a task title.");
+      expect(result.current.todos).toEqual(seed);
+    },
+  );
 
   it("is saving while the request is in flight and ignores a second submit", async () => {
     fetchTodos.mockResolvedValue(seed);
