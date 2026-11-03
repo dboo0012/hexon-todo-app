@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { createTodo, fetchTodos, type Todo } from "../api/todos";
+import { clearStoredTodos, loadStoredTodos, saveTodos } from "../storage/todoStorage";
 
 export type LoadStatus = "loading" | "error" | "ready";
 
@@ -97,8 +98,30 @@ export function useTodos() {
     }
   }, []);
 
+  // On launch, restore the saved list if there is one; otherwise fetch from the API.
+  // Saved data wins because the API never persists changes, so refetching would undo
+  // every toggle, delete and addition the user made.
   useEffect(() => {
-    void load();
+    void (async () => {
+      const stored = await loadStoredTodos();
+      if (!mounted.current) return;
+      if (stored) dispatch({ type: "load/success", todos: stored });
+      else await load();
+    })();
+  }, [load]);
+
+  // Save whenever the list changes once it is loaded.
+  useEffect(() => {
+    if (state.status !== "ready") return;
+    saveTodos(state.todos).catch(() => {
+      // Persistence is best-effort; the in-memory list stays correct.
+    });
+  }, [state.status, state.todos]);
+
+  /** Discards local changes and fetches the original 10 tasks again. */
+  const resetFromApi = useCallback(async () => {
+    await clearStoredTodos().catch(() => {});
+    await load();
   }, [load]);
 
   /** Returns true when the task was added, so the form knows to clear its input. */
@@ -133,5 +156,13 @@ export function useTodos() {
   const deleteTodo = useCallback((id: number) => dispatch({ type: "delete", id }), []);
   const clearAddError = useCallback(() => dispatch({ type: "add/clearError" }), []);
 
-  return { ...state, retry: load, addTodo, toggleTodo, deleteTodo, clearAddError };
+  return {
+    ...state,
+    retry: load,
+    resetFromApi,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    clearAddError,
+  };
 }

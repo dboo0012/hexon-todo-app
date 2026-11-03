@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // In-memory AsyncStorage so tests never touch device storage.
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
@@ -13,4 +15,9 @@ jest.mock(
 jest.mock("@expo/vector-icons/Ionicons", () => {
   const Icon = () => null;
   return { __esModule: true, default: Icon };
+});
+
+// Every test starts with empty storage.
+afterEach(async () => {
+  await AsyncStorage.clear();
 });

@@ -1,10 +1,19 @@
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AddTodoForm } from "../components/AddTodoForm";
 import { EmptyState, ErrorState, LoadingState } from "../components/States";
 import { TodoItem } from "../components/TodoItem";
 import { useTodos } from "../hooks/useTodos";
-import { colors, spacing } from "../theme";
+import { colors, radius, spacing, TOUCH_TARGET } from "../theme";
 
 export function TodoScreen() {
   const {
@@ -14,6 +23,7 @@ export function TodoScreen() {
     saving,
     addError,
     retry,
+    resetFromApi,
     addTodo,
     toggleTodo,
     deleteTodo,
@@ -29,13 +39,25 @@ export function TodoScreen() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <View style={styles.header}>
-          <Text style={styles.title} accessibilityRole="header">
-            Tasks
-          </Text>
-          {status === "ready" && todos.length > 0 && (
-            <Text style={styles.summary}>
-              {done} of {todos.length} done
+          <View>
+            <Text style={styles.title} accessibilityRole="header">
+              Tasks
             </Text>
+            <Text style={styles.summary}>
+              {status === "ready" && todos.length > 0 ? `${done} of ${todos.length} done` : " "}
+            </Text>
+          </View>
+          {status === "ready" && (
+            <Pressable
+              onPress={() => void resetFromApi()}
+              accessibilityRole="button"
+              accessibilityLabel="Reset list"
+              accessibilityHint="Discards your changes and reloads the first 10 tasks from the server"
+              style={({ pressed }) => [styles.reset, pressed && styles.resetPressed]}
+            >
+              <Ionicons name="refresh" size={18} color={colors.muted} />
+              <Text style={styles.resetText}>Reset</Text>
+            </Pressable>
           )}
         </View>
 
@@ -77,14 +99,24 @@ const styles = StyleSheet.create({
   flexGrow: { flexGrow: 1 },
   header: {
     flexDirection: "row",
-    alignItems: "baseline",
+    alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
     paddingBottom: spacing.md,
   },
   title: { fontSize: 32, fontWeight: "800", color: colors.ink, letterSpacing: -0.5 },
-  summary: { fontSize: 15, color: colors.muted },
+  summary: { fontSize: 15, color: colors.muted, marginTop: 2 },
+  reset: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+    minHeight: TOUCH_TARGET,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.pill,
+  },
+  resetPressed: { backgroundColor: colors.line },
+  resetText: { fontSize: 15, color: colors.muted, fontWeight: "600" },
   form: { paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
   list: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
 });

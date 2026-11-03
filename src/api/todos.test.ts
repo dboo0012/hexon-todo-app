@@ -44,6 +44,11 @@ describe("fetchTodos", () => {
     await expect(fetchTodos()).rejects.toThrow("took too long");
   });
 
+  it("rejects a JSON body that is not a list", async () => {
+    fetchMock.mockResolvedValue(jsonResponse(200, { error: "nope" }));
+    await expect(fetchTodos()).rejects.toThrow("unexpected response");
+  });
+
   it("rejects a body that is not JSON", async () => {
     fetchMock.mockResolvedValue({
       ok: true,

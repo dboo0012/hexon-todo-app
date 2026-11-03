@@ -49,8 +49,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 /** GET /todos?_limit=N (the brief asks for the first 10). */
-export function fetchTodos(limit = 10): Promise<Todo[]> {
-  return request<Todo[]>(`/todos?_limit=${limit}`);
+export async function fetchTodos(limit = 10): Promise<Todo[]> {
+  const todos = await request<unknown>(`/todos?_limit=${limit}`);
+  if (!Array.isArray(todos)) {
+    throw new ApiError("The server sent an unexpected response.");
+  }
+  return todos as Todo[];
 }
 
 /** POST /todos with `{ title, completed: false, userId }`. */

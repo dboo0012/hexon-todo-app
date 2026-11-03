@@ -17,7 +17,11 @@ const seed: Todo[] = [
   { id: 2, userId: 1, title: "quis ut nam facilis", completed: true },
 ];
 
-afterEach(() => jest.resetAllMocks());
+// Reset only the API mocks: resetAllMocks would also wipe the AsyncStorage mock.
+afterEach(() => {
+  fetchTodos.mockReset();
+  createTodo.mockReset();
+});
 
 function deferred<T>() {
   let resolve!: (value: T) => void;
