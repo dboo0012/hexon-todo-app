@@ -41,9 +41,12 @@ JSONPlaceholder always returns `id: 201` for created todos, so new tasks get a l
 - [x] **T3 useTodos hook** — load / retry / add (saving + error state, local id) / toggle / delete; tests.
 - [x] **T4 UI** — components + screen: FlatList, checkbox toggle, delete button, add form (trim validation, disabled while saving, inline error), loading / error+retry / empty states, KeyboardAvoidingView, safe area. Component tests.
 - [x] **T5 AsyncStorage bonus** — hydrate from storage on launch (skip network if present), persist on change, "Reset from API" action; tests.
-- [ ] **T6 Verify** — `npx expo start --web` smoke test in a browser (+ typecheck, lint, tests green).
+- [x] **T6 Verify** — `npx expo start --web` smoke test in a browser (+ typecheck, lint, tests green).
 - [ ] **T7 README** — overview, setup (Node, Expo Go / emulator / web), usage, scripts, structure, notes on JSONPlaceholder behaviour, decisions.
 
 ## Decisions
 
 - **AsyncStorage takes precedence over the network once data exists** — otherwise the bonus is meaningless because a refetch restores the original 10 todos. A "Reset" action refetches on demand.
+- **`aria-checked` alongside `accessibilityState`** — react-native-web 0.21 does not map `accessibilityState.checked` to the DOM, so web screen readers (and the browser smoke test) could not see completion state.
+- **Press handlers return `void`** — `onPress={() => void submit()}` so nothing awaits a still-pending save.
+- **Tests reset only the API mocks** — `jest.resetAllMocks()` also wipes the AsyncStorage mock's implementation.

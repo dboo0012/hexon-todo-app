@@ -17,6 +17,8 @@ function TodoItemComponent({ todo, onToggle, onDelete }: Props) {
         onPress={() => onToggle(todo.id)}
         accessibilityRole="checkbox"
         accessibilityState={{ checked: todo.completed }}
+        // react-native-web ignores accessibilityState.checked; aria-checked reaches the DOM.
+        aria-checked={todo.completed}
         accessibilityLabel={todo.title}
         accessibilityHint={todo.completed ? "Marks the task as not done" : "Marks the task as done"}
         style={({ pressed }) => [styles.toggle, pressed && styles.pressed]}
