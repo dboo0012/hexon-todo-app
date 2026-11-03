@@ -42,7 +42,7 @@ JSONPlaceholder always returns `id: 201` for created todos, so new tasks get a l
 - [x] **T4 UI** — components + screen: FlatList, checkbox toggle, delete button, add form (trim validation, disabled while saving, inline error), loading / error+retry / empty states, KeyboardAvoidingView, safe area. Component tests.
 - [x] **T5 AsyncStorage bonus** — hydrate from storage on launch (skip network if present), persist on change, "Reset from API" action; tests.
 - [x] **T6 Verify** — `npx expo start --web` smoke test in a browser (+ typecheck, lint, tests green).
-- [ ] **T7 README** — overview, setup (Node, Expo Go / emulator / web), usage, scripts, structure, notes on JSONPlaceholder behaviour, decisions.
+- [x] **T7 README** — overview, setup (Node, Expo Go / emulator / web), usage, scripts, structure, notes on JSONPlaceholder behaviour, decisions.
 
 ## Decisions
 
