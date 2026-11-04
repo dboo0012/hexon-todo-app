@@ -15,8 +15,8 @@ const fetchTodos = api.fetchTodos as jest.MockedFunction<typeof api.fetchTodos>;
 const createTodo = api.createTodo as jest.MockedFunction<typeof api.createTodo>;
 
 const seed: Todo[] = [
-  { id: 1, userId: 1, title: "delectus aut autem", completed: false },
-  { id: 2, userId: 1, title: "quis ut nam facilis", completed: false },
+  { id: 1, userId: 1, title: "Wash the dishes", completed: false },
+  { id: 2, userId: 1, title: "Take out the rubbish", completed: false },
 ];
 
 // Reset only the API mocks: resetAllMocks would also wipe the AsyncStorage mock.
@@ -32,8 +32,8 @@ it("saves changes and restores them after a restart without refetching", async (
   createTodo.mockResolvedValue({ id: 201, userId: 1, title: "Buy milk", completed: false });
 
   const first = await render(<App />);
-  await fireEvent.press(await screen.findByRole("checkbox", { name: "delectus aut autem" }));
-  await fireEvent.press(screen.getByRole("button", { name: 'Delete "quis ut nam facilis"' }));
+  await fireEvent.press(await screen.findByRole("checkbox", { name: "Wash the dishes" }));
+  await fireEvent.press(screen.getByRole("button", { name: 'Delete "Take out the rubbish"' }));
   await fireEvent.changeText(screen.getByLabelText("New task title"), "Buy milk");
   await fireEvent.press(screen.getByRole("button", { name: "Add task" }));
   await screen.findByRole("checkbox", { name: "Buy milk" });
@@ -43,9 +43,9 @@ it("saves changes and restores them after a restart without refetching", async (
 
   // "Restart" the app.
   await render(<App />);
-  expect(await screen.findByRole("checkbox", { name: "delectus aut autem" })).toBeChecked();
+  expect(await screen.findByRole("checkbox", { name: "Wash the dishes" })).toBeChecked();
   expect(screen.getByRole("checkbox", { name: "Buy milk" })).toBeOnTheScreen();
-  expect(screen.queryByText("quis ut nam facilis")).not.toBeOnTheScreen();
+  expect(screen.queryByText("Take out the rubbish")).not.toBeOnTheScreen();
   expect(fetchTodos).toHaveBeenCalledTimes(1);
 });
 
@@ -60,7 +60,7 @@ it("falls back to the API when stored data is corrupted", async () => {
   await AsyncStorage.setItem(STORAGE_KEY, "{not json");
   fetchTodos.mockResolvedValue(seed);
   await render(<App />);
-  expect(await screen.findByRole("checkbox", { name: "delectus aut autem" })).toBeOnTheScreen();
+  expect(await screen.findByRole("checkbox", { name: "Wash the dishes" })).toBeOnTheScreen();
   expect(fetchTodos).toHaveBeenCalledTimes(1);
 });
 
@@ -75,7 +75,7 @@ it("Reset discards local changes and reloads from the API", async () => {
 
   await fireEvent.press(screen.getByRole("button", { name: "Reset list" }));
 
-  expect(await screen.findByRole("checkbox", { name: "delectus aut autem" })).toBeOnTheScreen();
+  expect(await screen.findByRole("checkbox", { name: "Wash the dishes" })).toBeOnTheScreen();
   expect(screen.queryByText("Local only")).not.toBeOnTheScreen();
   await waitFor(async () => expect(await stored()).toEqual(seed));
 });

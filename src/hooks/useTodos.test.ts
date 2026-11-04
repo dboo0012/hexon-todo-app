@@ -13,8 +13,8 @@ const fetchTodos = api.fetchTodos as jest.MockedFunction<typeof api.fetchTodos>;
 const createTodo = api.createTodo as jest.MockedFunction<typeof api.createTodo>;
 
 const seed: Todo[] = [
-  { id: 1, userId: 1, title: "delectus aut autem", completed: false },
-  { id: 2, userId: 1, title: "quis ut nam facilis", completed: true },
+  { id: 1, userId: 1, title: "Wash the dishes", completed: false },
+  { id: 2, userId: 1, title: "Take out the rubbish", completed: true },
 ];
 
 // Reset only the API mocks: resetAllMocks would also wipe the AsyncStorage mock.

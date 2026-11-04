@@ -1,8 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Todo } from "../api/todos";
 
-/** Versioned so a future change to the stored shape can't be misread as current data. */
-export const STORAGE_KEY = "hexon-todo/tasks/v1";
+/**
+ * Versioned so a future change to the stored data can't be misread as current data.
+ * v2: tasks became household chores; lists saved under v1 still hold the lorem-ipsum titles.
+ */
+export const STORAGE_KEY = "hexon-todo/tasks/v2";
 
 function isTodo(value: unknown): value is Todo {
   const t = value as Todo;

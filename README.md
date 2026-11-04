@@ -21,7 +21,7 @@ Expo Go (see [Getting started](#getting-started)).
 ## Features
 
 **Required by the brief**
-- Fetches the first 10 tasks from `GET /todos?_limit=10` and shows each title with its completion state.
+- Fetches the first 10 tasks from `GET /todos?_limit=10` and shows each title with its completion state. The tasks are shown as household chores (see [Notes on JSONPlaceholder](#notes-on-jsonplaceholder)).
 - Tap a task to mark it done or not done. This is a local change only.
 - Add a task with the form at the top. This sends `POST /todos` with `{ title, completed: false, userId: 1 }`, and the new task appears at the top of the list as soon as the request succeeds.
 - Delete a task with the trash button. This is a local change only.
@@ -113,6 +113,9 @@ Tests sit next to the code (`*.test.ts(x)`). They cover:
 ## Notes on JSONPlaceholder
 
 JSONPlaceholder is a fake API: **writes are simulated and never saved**.
+- Its titles are lorem ipsum ("delectus aut autem"). The app still loads the 10 tasks from the API,
+  but shows a household chore for each id (`src/api/chores.ts`), so the list reads like a real
+  one. The id, completion state and userId come from the API unchanged.
 - `POST /todos` always returns `id: 201`. The app gives each added task the next free id above
   every id in the list instead, so React keys stay unique when you add more than one task.
 - Toggling and deleting never call the API, as the brief asks.

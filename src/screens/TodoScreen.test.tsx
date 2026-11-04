@@ -13,8 +13,8 @@ const fetchTodos = api.fetchTodos as jest.MockedFunction<typeof api.fetchTodos>;
 const createTodo = api.createTodo as jest.MockedFunction<typeof api.createTodo>;
 
 const seed: Todo[] = [
-  { id: 1, userId: 1, title: "delectus aut autem", completed: false },
-  { id: 2, userId: 1, title: "quis ut nam facilis", completed: true },
+  { id: 1, userId: 1, title: "Wash the dishes", completed: false },
+  { id: 2, userId: 1, title: "Take out the rubbish", completed: true },
 ];
 
 // Reset only the API mocks: resetAllMocks would also wipe the AsyncStorage mock.
@@ -49,8 +49,8 @@ describe("fetching", () => {
     await act(async () => pending.resolve(seed));
 
     expect(screen.queryByText("Loading tasks…")).not.toBeOnTheScreen();
-    expect(screen.getByRole("checkbox", { name: "delectus aut autem" })).not.toBeChecked();
-    expect(screen.getByRole("checkbox", { name: "quis ut nam facilis" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Wash the dishes" })).not.toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Take out the rubbish" })).toBeChecked();
     expect(screen.getByText("1 of 2 done")).toBeOnTheScreen();
   });
 
@@ -66,7 +66,7 @@ describe("fetching", () => {
     fetchTodos.mockResolvedValueOnce(seed);
     await fireEvent.press(screen.getByRole("button", { name: "Retry" }));
 
-    expect(await screen.findByRole("checkbox", { name: "delectus aut autem" })).toBeOnTheScreen();
+    expect(await screen.findByRole("checkbox", { name: "Wash the dishes" })).toBeOnTheScreen();
     expect(fetchTodos).toHaveBeenCalledTimes(2);
   });
 
@@ -79,23 +79,23 @@ describe("fetching", () => {
 describe("toggling and deleting", () => {
   it("toggles a task locally", async () => {
     await renderLoaded();
-    const task = screen.getByRole("checkbox", { name: "delectus aut autem" });
+    const task = screen.getByRole("checkbox", { name: "Wash the dishes" });
 
     await fireEvent.press(task);
-    expect(screen.getByRole("checkbox", { name: "delectus aut autem" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Wash the dishes" })).toBeChecked();
     expect(screen.getByText("2 of 2 done")).toBeOnTheScreen();
 
-    await fireEvent.press(screen.getByRole("checkbox", { name: "delectus aut autem" }));
-    expect(screen.getByRole("checkbox", { name: "delectus aut autem" })).not.toBeChecked();
+    await fireEvent.press(screen.getByRole("checkbox", { name: "Wash the dishes" }));
+    expect(screen.getByRole("checkbox", { name: "Wash the dishes" })).not.toBeChecked();
     expect(createTodo).not.toHaveBeenCalled();
   });
 
   it("deletes tasks locally and shows the empty state when none remain", async () => {
     await renderLoaded();
-    await fireEvent.press(screen.getByRole("button", { name: 'Delete "delectus aut autem"' }));
-    expect(screen.queryByText("delectus aut autem")).not.toBeOnTheScreen();
+    await fireEvent.press(screen.getByRole("button", { name: 'Delete "Wash the dishes"' }));
+    expect(screen.queryByText("Wash the dishes")).not.toBeOnTheScreen();
 
-    await fireEvent.press(screen.getByRole("button", { name: 'Delete "quis ut nam facilis"' }));
+    await fireEvent.press(screen.getByRole("button", { name: 'Delete "Take out the rubbish"' }));
     expect(screen.getByText("No tasks left")).toBeOnTheScreen();
     expect(fetchTodos).toHaveBeenCalledTimes(1);
   });

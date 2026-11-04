@@ -15,15 +15,27 @@ const jsonResponse = (status: number, body: unknown) =>
   }) as Response;
 
 describe("fetchTodos", () => {
-  it("requests the first 10 todos", async () => {
-    const todos = [{ id: 1, userId: 1, title: "delectus aut autem", completed: false }];
+  it("requests the first 10 todos and shows them as household chores", async () => {
+    const todos = [
+      { id: 1, userId: 1, title: "delectus aut autem", completed: false },
+      { id: 4, userId: 1, title: "et porro tempora", completed: true },
+    ];
     fetchMock.mockResolvedValue(jsonResponse(200, todos));
 
-    await expect(fetchTodos()).resolves.toEqual(todos);
+    await expect(fetchTodos()).resolves.toEqual([
+      { id: 1, userId: 1, title: "Wash the dishes", completed: false },
+      { id: 4, userId: 1, title: "Water the plants", completed: true },
+    ]);
     expect(fetchMock).toHaveBeenCalledWith(
       `${API_BASE_URL}/todos?_limit=10`,
       expect.objectContaining({ signal: expect.anything() }),
     );
+  });
+
+  it("keeps the API's title for ids without a chore", async () => {
+    const todos = [{ id: 11, userId: 1, title: "vero rerum temporibus dolor", completed: true }];
+    fetchMock.mockResolvedValue(jsonResponse(200, todos));
+    await expect(fetchTodos(11)).resolves.toEqual(todos);
   });
 
   it("throws an ApiError with the status for non-2xx responses", async () => {
