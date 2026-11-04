@@ -1,0 +1,14 @@
+// Cloudflare deployment of the web build (`npx expo export --platform web` -> dist/).
+// Static assets only: no Worker code runs. Deploy with `npm run deploy`.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "hexon-todo",
+  "compatibility_date": "2026-10-01",
+  // Every custom domain must be listed here: `wrangler deploy` replaces the Worker's
+  // custom-domain set with exactly this list.
+  "routes": [{ "pattern": "todo.darylboon.me", "custom_domain": true }],
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+  },
+}
