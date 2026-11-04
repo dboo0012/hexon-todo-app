@@ -6,6 +6,9 @@ them. Your changes are saved on the device.
 
 Built for the Hexon *React Native To Do Application* (junior) technical assessment.
 
+**Live web build: <https://todo.darylboon.me>**. The same code runs on iOS and Android through
+Expo Go (see [Getting started](#getting-started)).
+
 | | |
 |---|---|
 | Framework | Expo SDK 58, React Native 0.88, React 19 |
@@ -78,6 +81,12 @@ If your phone can't reach the dev server (for example on a restricted Wi-Fi netw
 | `npm run typecheck` | TypeScript type-check (`tsc --noEmit`) |
 | `npm run lint` | ESLint (`eslint-config-expo`) |
 | `npm run format` | Prettier |
+| `npm run build:web` | Static web build in `dist/` |
+| `npm run deploy` | Build for web and deploy to Cloudflare (`wrangler.jsonc`) |
+
+The live site is a static-assets Cloudflare Worker serving the web export; no server code runs.
+To deploy your own copy, run `npx wrangler login`, change the custom domain in `wrangler.jsonc`,
+then `npm run deploy`.
 
 ## Project structure
 
